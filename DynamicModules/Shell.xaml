@@ -1,0 +1,21 @@
+﻿<mui:ModernWindow x:Class="DM.Demo.Shell"
+                  xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+                  xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+                  xmlns:mui="http://firstfloorsoftware.com/ModernUI"
+                  xmlns:app="clr-namespace:DM.Demo"
+                  Icon="tcc.ico"
+                  Title="TCC Team Collaboration"
+                  IsTitleVisible="True"
+                  
+                  LogoData="
+                  M259.8,110.13l-10.07-9.67c-.48-.46-.39-.36-.83,0a21.25,21.25,0,1,1-9.48-36.68,21.56,21.56,0,0,1,9.47,4.78c.46.38.36.49.89,0l.2-.2,9.26-8.9c.31-.3.88-.55.84-1s-.56-.66-.89-1a35.67,35.67,0,0,0-20.88-9.13,34.75,34.75,0,0,0-14.15,1.39c-11.1,3.61-18.79,10.89-23.22,21.67a24.71,24.71,0,0,0-1.53,5,2.07,2.07,0,0,0-.13.32,38.85,38.85,0,0,0-.53,12.3,13.32,13.32,0,0,0,.52,2.89c0,.16,0,.33.07.49a34.14,34.14,0,0,0,2.18,6.54,36.29,36.29,0,0,0,30.76,21.67A37.41,37.41,0,0,0,245,119.38a35.44,35.44,0,0,0,14.79-8.45c.42-.41.42-.42,0-.81
+                  "
+                  Width="1024" Height="700"
+                  WindowStartupLocation="CenterScreen"
+                  ContentSource="/Views/IntroductionView.xaml">
+
+    <mui:ModernWindow.TitleLinks>
+        <mui:Link DisplayName="Settings" Source="/Views/SettingsView.xaml" />
+        <mui:Link DisplayName="Help" Source="https://github.com/hinojosachapel/DynamicModules" />
+    </mui:ModernWindow.TitleLinks>
+</mui:ModernWindow>
