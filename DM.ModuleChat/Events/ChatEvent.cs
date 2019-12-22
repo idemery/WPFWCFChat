@@ -1,4 +1,5 @@
 ﻿using Prism.Events;
+using SecuredChat;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -8,11 +9,6 @@ using System.Threading.Tasks;
 namespace DM.ModuleChat.Events
 {
     public class ChatEvent : PubSubEvent<DataModel>
-    {
-
-    }
-
-    public class DataModel // replace with datamodel class from secured chat
     {
 
     }

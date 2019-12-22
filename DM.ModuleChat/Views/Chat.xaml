@@ -9,13 +9,7 @@
              prism:ViewModelLocator.AutoWireViewModel="True"
              mc:Ignorable="d" 
              d:DesignHeight="300" d:DesignWidth="300">
-    <Grid >
-        <!--<ScrollViewer>
-            <StackPanel MinWidth="200">
-                <TextBlock Text="{Binding Header}" Margin="0,0,0,8" Style="{StaticResource Heading2}" />
-                <TextBlock Text="{Binding Description}" Margin="0,0,0,8" TextWrapping="Wrap" />
-            </StackPanel>
-        </ScrollViewer>-->
+    <Grid>
         <Grid.ColumnDefinitions>
             <ColumnDefinition Width="*"/>
             <ColumnDefinition Width="200"/>
@@ -31,8 +25,12 @@
                 <ColumnDefinition Width="*"/>
                 <ColumnDefinition Width="Auto"/>
             </Grid.ColumnDefinitions>
-            <TextBox Grid.Column="0"/>
-            <mui:ModernButton Margin="10,0" Grid.Column="1" IconData="M 7 4 C 4.253906 4 2 6.253906 2 9 L 2 33 C 2 35.746094 4.253906 38 7 38 L 11.085938 38 C 11.222656 39.199219 11.207031 40.316406 10.902344 41.25 C 10.519531 42.394531 9.808594 43.347656 8.484375 44.140625 C 8.101563 44.375 7.917969 44.832031 8.039063 45.265625 C 8.15625 45.699219 8.550781 46 9 46 C 13.246094 46 18.125 43.792969 20.578125 38 L 43 38 C 45.746094 38 48 35.746094 48 33 L 48 9 C 48 6.253906 45.746094 4 43 4 Z M 7 6 L 43 6 C 44.65625 6 46 7.34375 46 9 L 46 33 C 46 34.65625 44.65625 36 43 36 L 20 36 C 19.582031 36 19.203125 36.261719 19.0625 36.65625 C 17.503906 40.90625 14.71875 42.914063 11.828125 43.652344 C 12.222656 43.085938 12.589844 42.511719 12.796875 41.875 C 13.320313 40.300781 13.304688 38.578125 12.984375 36.820313 C 12.898438 36.34375 12.484375 36 12 36 L 7 36 C 5.34375 36 4 34.65625 4 33 L 4 9 C 4 7.34375 5.34375 6 7 6 Z M 25.707031 13.292969 L 24.292969 14.707031 L 29.585938 20 L 16 20 L 16 22 L 29.585938 22 L 24.292969 27.292969 L 25.707031 28.707031 L 33.414063 21 Z"></mui:ModernButton>
+            <TextBox Grid.Column="0" IsEnabled="{Binding Connected}" Text="{Binding Message, Mode=OneWayToSource}">
+                <TextBox.InputBindings>
+                    <KeyBinding Command="{Binding SendMessageCommand}" Key="Return" Gesture="Enter" />
+                </TextBox.InputBindings>
+            </TextBox>
+            <mui:ModernButton Command="{Binding SendMessageCommand}" Margin="10,0" Grid.Column="1" IconData="M 7 4 C 4.253906 4 2 6.253906 2 9 L 2 33 C 2 35.746094 4.253906 38 7 38 L 11.085938 38 C 11.222656 39.199219 11.207031 40.316406 10.902344 41.25 C 10.519531 42.394531 9.808594 43.347656 8.484375 44.140625 C 8.101563 44.375 7.917969 44.832031 8.039063 45.265625 C 8.15625 45.699219 8.550781 46 9 46 C 13.246094 46 18.125 43.792969 20.578125 38 L 43 38 C 45.746094 38 48 35.746094 48 33 L 48 9 C 48 6.253906 45.746094 4 43 4 Z M 7 6 L 43 6 C 44.65625 6 46 7.34375 46 9 L 46 33 C 46 34.65625 44.65625 36 43 36 L 20 36 C 19.582031 36 19.203125 36.261719 19.0625 36.65625 C 17.503906 40.90625 14.71875 42.914063 11.828125 43.652344 C 12.222656 43.085938 12.589844 42.511719 12.796875 41.875 C 13.320313 40.300781 13.304688 38.578125 12.984375 36.820313 C 12.898438 36.34375 12.484375 36 12 36 L 7 36 C 5.34375 36 4 34.65625 4 33 L 4 9 C 4 7.34375 5.34375 6 7 6 Z M 25.707031 13.292969 L 24.292969 14.707031 L 29.585938 20 L 16 20 L 16 22 L 29.585938 22 L 24.292969 27.292969 L 25.707031 28.707031 L 33.414063 21 Z"></mui:ModernButton>
         </Grid>
         
     </Grid>

@@ -33,6 +33,11 @@ namespace DM.ModuleChat.Services
                 DisplayName = "Settings",
                 Source = new Uri($"/DM.ModuleChat;component/Views/{nameof(ChatSettings)}.xaml", UriKind.Relative)
             });
+            linkGroup.Links.Add(new Link
+            {
+                DisplayName = "Host",
+                Source = new Uri($"/DM.ModuleChat;component/Views/{nameof(ChatHost)}.xaml", UriKind.Relative)
+            });
 
             return linkGroup;
         }

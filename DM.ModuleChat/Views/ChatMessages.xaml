@@ -13,17 +13,17 @@
             <ListView.ItemTemplate>
                 <DataTemplate>
                     <WrapPanel>
-                        <TextBlock Text="{Binding FromUser.Name}" FontWeight="Bold" />
+                        <TextBlock Text="{Binding Sender.Name}" FontWeight="Bold" />
                         <TextBlock Text=": " FontWeight="Bold" />
-                        <TextBlock Text="{Binding Content}" Width="225" TextWrapping="Wrap" HorizontalAlignment="Stretch" />
+                        <TextBlock Text="{Binding Message}" Width="225" TextWrapping="Wrap" HorizontalAlignment="Stretch" />
                     </WrapPanel>
                 </DataTemplate>
             </ListView.ItemTemplate>
-            <!--<ListView.ItemsPanel>
+            <ListView.ItemsPanel>
                 <ItemsPanelTemplate>
                     <StackPanel VerticalAlignment="Bottom"/>
                 </ItemsPanelTemplate>
-            </ListView.ItemsPanel>-->
+            </ListView.ItemsPanel>
         </ListView>
     </Grid>
 </UserControl>

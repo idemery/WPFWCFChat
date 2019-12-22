@@ -52,6 +52,8 @@
     <Reference Include="System.Configuration" />
     <Reference Include="System.Core" />
     <Reference Include="System.Drawing" />
+    <Reference Include="System.Runtime.Serialization" />
+    <Reference Include="System.ServiceModel" />
     <Reference Include="System.Windows.Forms" />
     <Reference Include="System.Windows.Interactivity, Version=4.5.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
       <HintPath>..\packages\Prism.Wpf.7.1.0.431\lib\net45\System.Windows.Interactivity.dll</HintPath>
@@ -88,18 +90,27 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Events\ChatEvent.cs" />
-    <Compile Include="Models\Message.cs" />
-    <Compile Include="Models\User.cs" />
+    <Compile Include="Events\ConnectionEvent.cs" />
+    <Compile Include="Helpers\ChatServiceHelper.cs" />
     <Compile Include="ModuleChat.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
-    <Compile Include="Services\ChatCommands.cs" />
-    <Compile Include="Services\IChatCommands.cs" />
+    <Compile Include="Services\ClientService.cs" />
+    <Compile Include="Services\ConnectionSettingsService.cs" />
+    <Compile Include="Services\HostService.cs" />
+    <Compile Include="Services\IConnectionSettingsService.cs" />
+    <Compile Include="Services\IHostActionsService.cs" />
+    <Compile Include="Services\IProxyService.cs" />
     <Compile Include="Services\LinkGroupService.cs" />
+    <Compile Include="Services\ProxyService.cs" />
+    <Compile Include="ViewModels\ChatHostViewModel.cs" />
     <Compile Include="ViewModels\ChatMessagesViewModel.cs" />
     <Compile Include="ViewModels\ChatUsersViewModel.cs" />
     <Compile Include="ViewModels\ChatViewModel.cs" />
     <Compile Include="Views\Chat.xaml.cs">
       <DependentUpon>Chat.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Views\ChatHost.xaml.cs">
+      <DependentUpon>ChatHost.xaml</DependentUpon>
     </Compile>
     <Compile Include="Views\ChatMessages.xaml.cs">
       <DependentUpon>ChatMessages.xaml</DependentUpon>
@@ -130,9 +141,15 @@
     <None Include="app.config" />
     <None Include="packages.config" />
   </ItemGroup>
-  <ItemGroup />
+  <ItemGroup>
+    <Folder Include="Models\" />
+  </ItemGroup>
   <ItemGroup>
     <Page Include="Views\Chat.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Views\ChatHost.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>

@@ -20,6 +20,7 @@
     <DefineConstants>DEBUG;TRACE</DefineConstants>
     <ErrorReport>prompt</ErrorReport>
     <WarningLevel>4</WarningLevel>
+    <AllowUnsafeBlocks>true</AllowUnsafeBlocks>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
     <DebugType>pdbonly</DebugType>
@@ -48,6 +49,10 @@
     <Reference Include="System" />
     <Reference Include="System.Configuration" />
     <Reference Include="System.Core" />
+    <Reference Include="System.Drawing" />
+    <Reference Include="System.Runtime.Serialization" />
+    <Reference Include="System.ServiceModel" />
+    <Reference Include="System.Windows.Forms" />
     <Reference Include="System.Windows.Interactivity, Version=4.5.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
       <HintPath>..\packages\Prism.Wpf.7.1.0.431\lib\net45\System.Windows.Interactivity.dll</HintPath>
     </Reference>
@@ -80,6 +85,33 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Chat\ClientHelper\Capturing\API.cs" />
+    <Compile Include="Chat\ClientHelper\Capturing\CaptureDesktop.cs" />
+    <Compile Include="Chat\ClientHelper\Controls\Desktop.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="Chat\ClientHelper\Controls\Desktop.Designer.cs">
+      <DependentUpon>Desktop.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Chat\ClientHelper\DesktopCompression.cs" />
+    <Compile Include="Chat\ClientHelper\DesktopHandler.cs" />
+    <Compile Include="Chat\ClientHelper\Global\Global.cs" />
+    <Compile Include="Chat\ClientHelper\Imaging\ImageBytesConverter.cs" />
+    <Compile Include="Chat\ClientHelper\Imaging\ImageXOR.cs" />
+    <Compile Include="Chat\ClientHelper\RemoteAction\MouseAction.cs" />
+    <Compile Include="Chat\ClientHelper\RemoteAction\SimulateAction.cs" />
+    <Compile Include="Chat\MemCompressor\Consts.cs" />
+    <Compile Include="Chat\MemCompressor\Deflator.cs" />
+    <Compile Include="Chat\MemCompressor\Inflator.cs" />
+    <Compile Include="Chat\MemCompressor\Utils.cs" />
+    <Compile Include="Chat\Security\AesHelper.cs" />
+    <Compile Include="Chat\Models\ChatJoin.cs" />
+    <Compile Include="Chat\Models\ChatLeave.cs" />
+    <Compile Include="Chat\Models\ChatMessage.cs" />
+    <Compile Include="Chat\Models\ClientModel.cs" />
+    <Compile Include="Chat\Models\DataModel.cs" />
+    <Compile Include="Chat\Services\IClientService.cs" />
+    <Compile Include="Chat\Services\IHostService.cs" />
     <Compile Include="Services\ICustomerService.cs" />
     <Compile Include="Interfaces\ILinkGroupService.cs" />
     <Compile Include="CoreModule.cs" />
@@ -90,6 +122,11 @@
   <ItemGroup>
     <None Include="app.config" />
     <None Include="packages.config" />
+  </ItemGroup>
+  <ItemGroup>
+    <EmbeddedResource Include="Chat\ClientHelper\Controls\Desktop.resx">
+      <DependentUpon>Desktop.cs</DependentUpon>
+    </EmbeddedResource>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
