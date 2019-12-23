@@ -30,10 +30,11 @@ namespace DM.ModuleChat.ViewModels
             ea.GetEvent<ClientConnectionEvent>().Subscribe(ClientConnectionStateChanged, ThreadOption.UIThread);
 
             ConnectCommand = new DelegateCommand(Connect, () =>
-            State != CommunicationState.Opened
-            && !string.IsNullOrWhiteSpace(ConnectionSettings.EndPointAddress)
-            && !string.IsNullOrWhiteSpace(ConnectionSettings.IP)
-            && !string.IsNullOrWhiteSpace(ConnectionSettings.UserName));
+            State != CommunicationState.Opened);
+            //&& !string.IsNullOrWhiteSpace(ConnectionSettings.EndPointAddress)
+            //&& !string.IsNullOrWhiteSpace(ConnectionSettings.IP)
+            //&& !string.IsNullOrWhiteSpace(ConnectionSettings.UserName));
+
 
             DisconnectCommand = new DelegateCommand(Disconnect, () => State == CommunicationState.Opened);
         }
