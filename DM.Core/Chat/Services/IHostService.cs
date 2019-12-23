@@ -11,7 +11,7 @@ namespace SecuredChat
         void Connect(ClientModel clientModel);
 
         [OperationContract(IsOneWay = true)]
-        void Send(object data);
+        void Send(DataModel dataModel);
 
         [OperationContract(IsTerminating = true, IsOneWay = true)]
         void Disconnect();

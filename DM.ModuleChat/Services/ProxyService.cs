@@ -1,4 +1,5 @@
-﻿using DM.ModuleChat.Events;
+﻿using DM.Core.Events;
+using DM.ModuleChat.Events;
 using DM.ModuleChat.Helpers;
 using Prism.Events;
 using SecuredChat;
@@ -6,19 +7,68 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.ServiceModel;
+using System.ServiceModel.Channels;
 using System.Text;
 using System.Threading.Tasks;
 
 namespace DM.ModuleChat.Services
 {
-    public class ProxyService : DuplexClientBase<IHostService>, IProxyService
+    public class ProxyService : IProxyService
     {
-        IEventAggregator _eventAggregator;
+        private readonly IEventAggregator _eventAggregator;
+        private readonly IConnectionSettingsService settings;
+        private readonly IClientService clientService;
 
         public ProxyService(IClientService clientService, IConnectionSettingsService settings, IEventAggregator ea)
-            : base(new InstanceContext(clientService), ChatServiceHelper.GetBinding(),
-                  new EndpointAddress($"net.tcp://{settings.IP}:8080/SecuredChat/{settings.EndPointAddress}"))
         {
+            _eventAggregator = ea;
+            this.clientService = clientService;
+            this.settings = settings;
+
+            _eventAggregator.GetEvent<AppExitEvent>().Subscribe((code) => { if (_proxy != null) { Disconnect(); } });
+        }
+
+        private Proxy _proxy;
+
+        public Proxy Proxy
+        {
+            get
+            {
+                if (_proxy == null)
+                {
+                    _proxy = new Proxy(new InstanceContext(clientService), ChatServiceHelper.GetBinding(),
+                    new EndpointAddress($"net.tcp://{settings.IP}:8080/SecuredChat/{settings.EndPointAddress}"), settings, _eventAggregator);
+                }
+                return _proxy;
+            }
+        }
+
+        public void Connect(ClientModel clientModel)
+        {
+            Proxy.Connect(clientModel);
+        }
+
+        public void Disconnect()
+        {
+            Proxy.Disconnect();
+        }
+
+        public void Send(DataModel data)
+        {
+            Proxy.Send(data);
+        }
+    }
+
+    public class Proxy : DuplexClientBase<IHostService>, IProxyService
+    {
+        private readonly IEventAggregator _eventAggregator;
+        private readonly IConnectionSettingsService settings;
+
+        public Proxy(InstanceContext instanceContext, Binding binding, EndpointAddress endpointAddress, 
+            IConnectionSettingsService settings, IEventAggregator ea)
+            : base(instanceContext, binding, endpointAddress)
+        {
+            this.settings = settings;
             _eventAggregator = ea;
 
             InnerDuplexChannel.Opened += InnerDuplexChannel_StateChanged;
@@ -31,23 +81,38 @@ namespace DM.ModuleChat.Services
             IDuplexContextChannel duplexContext = sender as IDuplexContextChannel;
             if (duplexContext != null)
             {
-                _eventAggregator.GetEvent<ClientConnectionEvent>().Publish(duplexContext.State);
+                CommunicationState state = duplexContext.State;
+                _eventAggregator.GetEvent<ClientConnectionEvent>().Publish(state);
             }
         }
 
+
         public void Connect(ClientModel clientModel)
         {
-            Channel.Connect(clientModel);
+            if (State != CommunicationState.Opened)
+            {
+                Channel.Connect(clientModel ?? new ClientModel { Name = settings.UserName });
+            }
         }
 
         public void Disconnect()
         {
-            Channel.Disconnect();
+            if (State == CommunicationState.Opened)
+            {
+                Channel.Disconnect();
+            }
         }
 
-        public void Send(object data)
+        public void Send(DataModel data)
         {
-            Channel.Send(data);
+            if (State == CommunicationState.Opened)
+            {
+                Channel.Send(data);
+            }
+            else
+            {
+                throw new Exception($"Connection state is {State}");
+            }
         }
     }
 }

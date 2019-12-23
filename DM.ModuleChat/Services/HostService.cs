@@ -1,4 +1,5 @@
-﻿using DM.ModuleChat.Events;
+﻿using DM.Core.Events;
+using DM.ModuleChat.Events;
 using DM.ModuleChat.Helpers;
 using Prism.Events;
 using SecuredChat;
@@ -33,6 +34,8 @@ namespace DM.ModuleChat.Services
             serviceHost.Opened += ServiceHost_StateChanegd;
             serviceHost.Closed += ServiceHost_StateChanegd;
             serviceHost.Faulted += ServiceHost_StateChanegd;
+
+            _eventAggregator.GetEvent<AppExitEvent>().Subscribe((code) => serviceHost.Abort());
         }
         #endregion
         #region Properties
@@ -73,15 +76,6 @@ namespace DM.ModuleChat.Services
 
             RemoveClient(session_id);
             Receive(new ChatLeave { Sender = client });
-        }
-
-        private void DisconnectAll()
-        {
-            var sessions = Clients.Select(c => c.SessionId).ToList();
-            foreach (var sid in sessions)
-            {
-                DisconnectClient(sid);
-            }
         }
 
         private void Receive(DataModel data, params string[] except_session_ids)
@@ -134,13 +128,7 @@ namespace DM.ModuleChat.Services
         {
             if (serviceHost.State == CommunicationState.Opened)
             {
-                DisconnectAll();
-
                 serviceHost.Close(TimeSpan.FromMilliseconds(1500));
-            }
-            else
-            {
-                serviceHost.Abort();
             }
         }
         #endregion
@@ -151,8 +139,10 @@ namespace DM.ModuleChat.Services
             clientModel.SessionId = clientModel.Context.SessionId;
             clientModel.Context.Channel.Faulted += Channel_Faulted;
 
-            //RemoveClient(clientModel.SessionId);
             Clients.Add(clientModel);
+
+            Receive(new ChatJoin { Sender = clientModel }, CurrentSessionId);
+            ReceiveTo(new ChatJoin { Sender = clientModel, Clients = Clients.ToList() }, CurrentSessionId);
         }
 
         public void Disconnect()
@@ -160,35 +150,20 @@ namespace DM.ModuleChat.Services
             DisconnectClient(CurrentSessionId);
         }
 
-        public void Send(object data)
+        public void Send(DataModel data)
         {
-            var client = Clients.SingleOrDefault(c => c.SessionId == CurrentSessionId);
+            var sender = Clients.SingleOrDefault(c => c.SessionId == CurrentSessionId);
+
+            data.Sender = sender;
 
             List<string> send_to_all_except = new List<string>();
 
-            DataModel dataModel = null;
-
-            if (data is string && !string.IsNullOrWhiteSpace(Convert.ToString(data)))
+            if (!(data is ChatMessage))
             {
-                dataModel = new ChatMessage { Sender = client, Data = data };
-            }
-            else if (data is ScreenModel)
-            {
-                send_to_all_except.Add(CurrentSessionId);
-                dataModel = data as ScreenModel;
-                dataModel.Sender = client;
-            }
-            else if (data is DataModel)
-            {
-                send_to_all_except.Add(CurrentSessionId);
-                dataModel = (DataModel)data;
-                dataModel.Sender = client;
+                send_to_all_except.Add(sender.SessionId);
             }
 
-            if (dataModel != null)
-            {
-                Receive(dataModel, send_to_all_except.ToArray());
-            }
+            Receive(data, send_to_all_except.ToArray());
         }
         #endregion
     }

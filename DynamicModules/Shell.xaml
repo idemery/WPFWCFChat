@@ -16,6 +16,6 @@
 
     <mui:ModernWindow.TitleLinks>
         <mui:Link DisplayName="Settings" Source="/Views/SettingsView.xaml" />
-        <mui:Link DisplayName="Help" Source="https://github.com/hinojosachapel/DynamicModules" />
+        <mui:Link DisplayName="Help" Source="https://www.tcc-ict.com" />
     </mui:ModernWindow.TitleLinks>
 </mui:ModernWindow>

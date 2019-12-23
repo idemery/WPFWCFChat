@@ -51,6 +51,7 @@
     <Reference Include="System" />
     <Reference Include="System.Configuration" />
     <Reference Include="System.Core" />
+    <Reference Include="System.DirectoryServices.AccountManagement" />
     <Reference Include="System.Drawing" />
     <Reference Include="System.Runtime.Serialization" />
     <Reference Include="System.ServiceModel" />
@@ -92,6 +93,7 @@
     <Compile Include="Events\ChatEvent.cs" />
     <Compile Include="Events\ConnectionEvent.cs" />
     <Compile Include="Helpers\ChatServiceHelper.cs" />
+    <Compile Include="Helpers\TextBoxEnterKeyTrigger.cs" />
     <Compile Include="ModuleChat.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Services\ClientService.cs" />
@@ -106,6 +108,8 @@
     <Compile Include="ViewModels\ChatMessagesViewModel.cs" />
     <Compile Include="ViewModels\ChatUsersViewModel.cs" />
     <Compile Include="ViewModels\ChatViewModel.cs" />
+    <Compile Include="ViewModels\ConnectionSettingsViewModel.cs" />
+    <Compile Include="ViewModels\UserTypingViewModel.cs" />
     <Compile Include="Views\Chat.xaml.cs">
       <DependentUpon>Chat.xaml</DependentUpon>
     </Compile>
@@ -135,6 +139,9 @@
     </Compile>
     <Compile Include="Views\ScreenCastSettings.xaml.cs">
       <DependentUpon>ScreenCastSettings.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Views\UserTyping.xaml.cs">
+      <DependentUpon>UserTyping.xaml</DependentUpon>
     </Compile>
   </ItemGroup>
   <ItemGroup>
@@ -182,6 +189,10 @@
       <Generator>MSBuild:Compile</Generator>
     </Page>
     <Page Include="Views\ScreenCastSettings.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Views\UserTyping.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>

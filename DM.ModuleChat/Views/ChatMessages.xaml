@@ -15,7 +15,7 @@
                     <WrapPanel>
                         <TextBlock Text="{Binding Sender.Name}" FontWeight="Bold" />
                         <TextBlock Text=": " FontWeight="Bold" />
-                        <TextBlock Text="{Binding Message}" Width="225" TextWrapping="Wrap" HorizontalAlignment="Stretch" />
+                        <TextBlock Text="{Binding Message}" TextWrapping="Wrap" HorizontalAlignment="Stretch" />
                     </WrapPanel>
                 </DataTemplate>
             </ListView.ItemTemplate>

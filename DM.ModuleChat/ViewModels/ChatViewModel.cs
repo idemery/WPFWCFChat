@@ -3,6 +3,7 @@ using DM.ModuleChat.Services;
 using Prism.Commands;
 using Prism.Events;
 using Prism.Mvvm;
+using SecuredChat;
 using System.ServiceModel;
 
 namespace DM.ModuleChat.ViewModels
@@ -11,6 +12,7 @@ namespace DM.ModuleChat.ViewModels
     {
         private readonly IProxyService proxy;
         public DelegateCommand SendMessageCommand { get; private set; }
+        public DelegateCommand IsTypingCommand { get; private set; }
         private bool _connected;
 
         public bool Connected
@@ -18,20 +20,31 @@ namespace DM.ModuleChat.ViewModels
             get { return _connected; }
             set { SetProperty(ref _connected, value); SendMessageCommand.RaiseCanExecuteChanged(); }
         }
-        public string Message { get; set; }
+
+        private string _msg;
+        public string Message
+        {
+            get { return _msg; }
+            set { SetProperty(ref _msg, value); }
+        }
 
         public ChatViewModel(IEventAggregator ea, IProxyService proxy)
         {
             this.proxy = proxy;
 
-            SendMessageCommand = new DelegateCommand(SendMessage, CanSendMessage);
+            SendMessageCommand = new DelegateCommand(SendMessage, () => Connected && !string.IsNullOrWhiteSpace(Message));
+            IsTypingCommand = new DelegateCommand(IsTyping);
 
             ea.GetEvent<ClientConnectionEvent>().Subscribe(StateChanged, ThreadOption.UIThread);
         }
 
-        public void SendMessage() => proxy.Send(Message);
+        public void SendMessage()
+        {
+            proxy.Send(new ChatMessage { Message = Message });
+            Message = string.Empty;
+        }
 
-        public bool CanSendMessage() => Connected && !string.IsNullOrWhiteSpace(Message);
+        public void IsTyping() => proxy.Send(new ChatTyping());
 
         private void StateChanged(CommunicationState state) => Connected = state == CommunicationState.Opened;
     }

@@ -22,37 +22,26 @@ namespace DM.ModuleChat.ViewModels
             _state = CommunicationState.Created;
 
             ea.GetEvent<HostConnectionEvent>().Subscribe(HostConnectionStateChanged, ThreadOption.UIThread);
-            StartCommand = new DelegateCommand(Start, CanStart);
-            StopCommand = new DelegateCommand(Stop, CanStop);
+            StartCommand = new DelegateCommand(Start, () => State != CommunicationState.Opened);
+            StopCommand = new DelegateCommand(Stop, () => State == CommunicationState.Opened);
         }
 
-        public CommunicationState State { get { return _state; } set { SetProperty(ref _state, value); StartCommand.RaiseCanExecuteChanged(); StopCommand.RaiseCanExecuteChanged(); } }
+        public CommunicationState State
+        {
+            get => _state;
+            set
+            {
+                SetProperty(ref _state, value);
+                StartCommand.RaiseCanExecuteChanged();
+                StopCommand.RaiseCanExecuteChanged();
+            }
+        }
 
         public string EndPointAddress => hostService.EndPointAddress;
 
-        private void HostConnectionStateChanged(CommunicationState state)
-        {
-            State = state;
-        }
+        private void HostConnectionStateChanged(CommunicationState state) => State = state;
 
-        public async void Start()
-        {
-            await Task.Run(() => hostService.Start());
-        }
-
-        public bool CanStart()
-        {
-            return State != CommunicationState.Opened;
-        }
-
-        public async void Stop()
-        {
-            await Task.Run(() => hostService.Stop());
-        }
-
-        public bool CanStop()
-        {
-            return State == CommunicationState.Opened;
-        }
+        public async void Start() => await Task.Run(() => hostService.Start());
+        public async void Stop() => await Task.Run(() => hostService.Stop());
     }
 }

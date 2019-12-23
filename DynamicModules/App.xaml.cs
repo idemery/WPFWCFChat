@@ -81,5 +81,29 @@ namespace DM.Demo
         {
             return typeObj.ToString() == criteriaObj.ToString();
         }
+
+        protected override void OnStartup(StartupEventArgs e)
+        {
+            base.OnStartup(e);
+
+            AppDomain.CurrentDomain.UnhandledException += AppDomainUnhandledException;
+        }
+
+        private static void AppDomainUnhandledException(object sender, UnhandledExceptionEventArgs e)
+        {
+            Exception ex = e.ExceptionObject as Exception;
+            if (!e.IsTerminating && ex != null)
+            {
+                FirstFloor.ModernUI.Windows.Controls.ModernDialog.ShowMessage(ex.Message, "Error", MessageBoxButton.OK);
+            }
+        }
+
+        protected override void OnExit(ExitEventArgs e)
+        {
+            var ea = Container.Resolve<Prism.Events.IEventAggregator>();
+            ea.GetEvent<Core.Events.AppExitEvent>().Publish(e.ApplicationExitCode);
+
+            base.OnExit(e);
+        }
     }
 }

@@ -112,6 +112,7 @@
     <Compile Include="Chat\Models\DataModel.cs" />
     <Compile Include="Chat\Services\IClientService.cs" />
     <Compile Include="Chat\Services\IHostService.cs" />
+    <Compile Include="Events\AppExitEvent.cs" />
     <Compile Include="Services\ICustomerService.cs" />
     <Compile Include="Interfaces\ILinkGroupService.cs" />
     <Compile Include="CoreModule.cs" />
