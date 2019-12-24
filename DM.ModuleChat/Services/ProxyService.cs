@@ -43,8 +43,15 @@ namespace DM.ModuleChat.Services
             }
         }
 
+        public CommunicationState State => Proxy?.State ?? CommunicationState.Created;
+
         public void Connect(ClientModel clientModel)
         {
+            if (State == CommunicationState.Faulted)
+            {
+                _proxy = null;
+            }
+
             Proxy.Connect(clientModel);
         }
 
@@ -107,11 +114,7 @@ namespace DM.ModuleChat.Services
         {
             if (State == CommunicationState.Opened)
             {
-                Channel.Send(data);
-            }
-            else
-            {
-                throw new Exception($"Connection state is {State}");
+                Task.Factory.StartNew(() => Channel.Send(data));
             }
         }
     }

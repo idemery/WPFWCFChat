@@ -13,7 +13,7 @@ namespace SecuredChat
         [OperationContract(IsInitiating = false, IsOneWay = true)]
         void Send(DataModel dataModel);
 
-        [OperationContract(IsInitiating = false, IsOneWay = true)]
+        [OperationContract(IsInitiating = false, IsTerminating = true, IsOneWay = true)]
         void Disconnect();
     }
 }

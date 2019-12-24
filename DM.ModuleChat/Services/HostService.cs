@@ -82,6 +82,8 @@ namespace DM.ModuleChat.Services
         {
             var sessions = Clients.Select(c => c.SessionId).Except(except_session_ids).ToList();
 
+            List<string> faulted = new List<string>();
+
             foreach (var sid in sessions)
             {
                 var client = Clients.FirstOrDefault(c => c.SessionId == sid);
@@ -89,7 +91,18 @@ namespace DM.ModuleChat.Services
                 {
                     Task.Factory.StartNew(() => client.Callback.Receive(data));
                 }
-                catch { }
+                catch
+                {
+                    faulted.Add(sid);
+                }
+            }
+
+            if (faulted.Any())
+            {
+                foreach (var item in faulted)
+                {
+                    DisconnectClient(item);
+                }
             }
         }
 

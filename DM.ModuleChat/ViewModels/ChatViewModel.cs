@@ -4,22 +4,16 @@ using Prism.Commands;
 using Prism.Events;
 using Prism.Mvvm;
 using SecuredChat;
+using System.Collections.Generic;
 using System.ServiceModel;
 
 namespace DM.ModuleChat.ViewModels
 {
-    public class ChatViewModel : BindableBase
+    public class ChatViewModel : BaseViewModel
     {
         private readonly IProxyService proxy;
         public DelegateCommand SendMessageCommand { get; private set; }
         public DelegateCommand IsTypingCommand { get; private set; }
-        private bool _connected;
-
-        public bool Connected
-        {
-            get { return _connected; }
-            set { SetProperty(ref _connected, value); SendMessageCommand.RaiseCanExecuteChanged(); }
-        }
 
         private string _msg;
         public string Message
@@ -28,14 +22,14 @@ namespace DM.ModuleChat.ViewModels
             set { SetProperty(ref _msg, value); }
         }
 
-        public ChatViewModel(IEventAggregator ea, IProxyService proxy)
+        public ChatViewModel(IEventAggregator ea, IProxyService proxy) : base(ea)
         {
             this.proxy = proxy;
 
             SendMessageCommand = new DelegateCommand(SendMessage, () => Connected && !string.IsNullOrWhiteSpace(Message));
-            IsTypingCommand = new DelegateCommand(IsTyping);
+            commandsToNotify.Add(SendMessageCommand);
 
-            ea.GetEvent<ClientConnectionEvent>().Subscribe(StateChanged, ThreadOption.UIThread);
+            IsTypingCommand = new DelegateCommand(IsTyping);
         }
 
         public void SendMessage()
@@ -45,7 +39,5 @@ namespace DM.ModuleChat.ViewModels
         }
 
         public void IsTyping() => proxy.Send(new ChatTyping());
-
-        private void StateChanged(CommunicationState state) => Connected = state == CommunicationState.Opened;
     }
 }

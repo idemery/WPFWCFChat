@@ -21,7 +21,7 @@
     <DefineConstants>DEBUG;TRACE</DefineConstants>
     <ErrorReport>prompt</ErrorReport>
     <WarningLevel>4</WarningLevel>
-    <PlatformTarget>AnyCPU</PlatformTarget>
+    <PlatformTarget>x86</PlatformTarget>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
     <DebugType>pdbonly</DebugType>
@@ -105,6 +105,7 @@
     <Compile Include="Services\IProxyService.cs" />
     <Compile Include="Services\LinkGroupService.cs" />
     <Compile Include="Services\ProxyService.cs" />
+    <Compile Include="ViewModels\BaseViewModel.cs" />
     <Compile Include="ViewModels\ChatHostViewModel.cs" />
     <Compile Include="ViewModels\ChatMessagesViewModel.cs" />
     <Compile Include="ViewModels\ChatUsersViewModel.cs" />

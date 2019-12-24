@@ -6,8 +6,10 @@ using Prism.Events;
 using Prism.Mvvm;
 using SecuredChat;
 using System;
+using System.ComponentModel;
 using System.Drawing;
 using System.Runtime.InteropServices;
+using System.ServiceModel;
 using System.Timers;
 using System.Windows;
 using System.Windows.Interop;
@@ -26,22 +28,22 @@ namespace DM.ModuleChat.ViewModels
             set { SetProperty(ref _imgSrc, value); }
         }
 
-
-
         private Screen screen;
 
         public DelegateCommand StartScreenCastCommand { get; private set; }
 
-        private Timer screenCastTimer = new Timer();
+
+        BackgroundWorker Worker = new BackgroundWorker();
+
         private PresenterDesktop Desktop = new PresenterDesktop();
         private IProxyService proxyService;
 
         public ScreenCastingViewModel(IEventAggregator ea, IProxyService proxyService)
         {
             this.proxyService = proxyService;
-            screenCastTimer.Interval = 1000;
 
-            screenCastTimer.Elapsed += ScreenCastTimer_Elapsed;
+            Worker.WorkerSupportsCancellation = true;
+
 
             screen = new Screen();
 
@@ -50,48 +52,107 @@ namespace DM.ModuleChat.ViewModels
             StartScreenCastCommand = new DelegateCommand(StartScreenCast);
         }
 
-        private void ScreenCastTimer_Elapsed(object sender, ElapsedEventArgs e)
+        private bool _casting;
+
+        public bool Casting
         {
-            proxyService.Send(new ScreenModel { Reference = false, Desktop = Desktop.GetCompressedDifferenceDesktop() });
+            get { return _casting; }
+            set { SetProperty(ref _casting, value); }
         }
 
         private void StartScreenCast()
         {
-            if (screenCastTimer.Enabled)
+            if (Casting)
             {
-                screenCastTimer.Stop();
+                Worker.CancelAsync();
+                Worker.DoWork -= new DoWorkEventHandler(Worker_DoWork);
+                Worker.RunWorkerCompleted -= new RunWorkerCompletedEventHandler(Worker_RunWorkerCompleted);
+
                 proxyService.Send(new ScreenModel { Stopped = true });
             }
             else
             {
                 proxyService.Send(new ScreenModel { Reference = true, Desktop = Desktop.GetCompressedReferenceDesktop() });
-                System.Threading.Thread.Sleep(1000);
-                screenCastTimer.Start();
+                System.Threading.Thread.Sleep(500);
+
+                Worker.DoWork += new DoWorkEventHandler(Worker_DoWork);
+                Worker.RunWorkerCompleted += new RunWorkerCompletedEventHandler(Worker_RunWorkerCompleted);
+                Worker.RunWorkerAsync();
             }
+
+            Casting = !Casting;
+        }
+
+        void Worker_DoWork(object sender, DoWorkEventArgs e)
+        {
+            if (Worker.CancellationPending || proxyService.State != CommunicationState.Opened)
+            {
+                e.Cancel = true;
+                return;
+            }
+
+            proxyService.Send(new ScreenModel { Reference = false, Desktop = Desktop.GetCompressedDifferenceDesktop() });
+        }
+        void Worker_RunWorkerCompleted(object sender, RunWorkerCompletedEventArgs e)
+        {
+            if (e.Cancelled || !Casting)
+            {
+                return;
+            }
+
+            Worker.RunWorkerAsync();
         }
 
         private void ScreenReceived(DataModel dataModel)
         {
             ScreenModel screenModel = dataModel as ScreenModel;
 
+            if (screenModel.Stopped)
+            {
+                ImageSource = null;
+                return;
+            }
+
+            if (screenModel.Desktop.ImageBytes == null)
+            {
+                return;
+            }
+
             if (screenModel.Reference)
             {
-                ImageSource = GetBitmapSource(screen.GetReferenceDesktop(screenModel.Desktop));
+                ImageSource = ToBitmapSource(screen.GetReferenceDesktop(screenModel.Desktop));
             }
             else
             {
-                ImageSource = GetBitmapSource(screen.GetDifferenceDesktop(screenModel.Desktop));
+                ImageSource = ToBitmapSource(screen.GetDifferenceDesktop(screenModel.Desktop));
             }
         }
 
-        private static ImageSource GetBitmapSource(Bitmap bitmap)
+        public static ImageSource ToBitmapSource(Bitmap source)
         {
-            return Imaging.CreateBitmapSourceFromHBitmap(
-                                              bitmap.GetHbitmap(),
-                                              IntPtr.Zero,
-                                              Int32Rect.Empty,
-                                              BitmapSizeOptions.FromEmptyOptions());
+            var hBitmap = source.GetHbitmap();
+
+            try
+            {
+                return Imaging.CreateBitmapSourceFromHBitmap(
+                    hBitmap,
+                    IntPtr.Zero,
+                    Int32Rect.Empty,
+                    BitmapSizeOptions.FromEmptyOptions());
+            }
+            catch (Win32Exception)
+            {
+                return null;
+            }
+            finally
+            {
+                DeleteObject(hBitmap);
+            }
         }
+
+        [DllImport("gdi32.dll")]
+        [return: MarshalAs(UnmanagedType.Bool)]
+        internal static extern bool DeleteObject(IntPtr hObject);
     }
 
     public class Screen

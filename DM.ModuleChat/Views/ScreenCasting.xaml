@@ -9,9 +9,14 @@
              mc:Ignorable="d" 
              d:DesignHeight="300" d:DesignWidth="300">
     <StackPanel>
-        <Button Content="Screen Cast" Command="{Binding StartScreenCastCommand}" />
+        <StackPanel.Resources>
+            <BooleanToVisibilityConverter x:Key="BoolToVis" />
+        </StackPanel.Resources>
+        <Button Content="Start/Stop Screen Casting" Command="{Binding StartScreenCastCommand}" />
+        <TextBlock Margin="15" Visibility="{Binding Path=Casting, Converter={StaticResource BoolToVis}}" 
+                   Text="Your desktop screen is currently being casted to viewers.." />
         <ScrollViewer>
-            <Image Source="{Binding ImageSource}" />
+            <Image Source="{Binding ImageSource}" Stretch="Uniform" />
         </ScrollViewer>
     </StackPanel>
 </UserControl>

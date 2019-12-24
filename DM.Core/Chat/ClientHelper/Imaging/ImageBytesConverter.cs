@@ -7,21 +7,19 @@ namespace idemery.Remoot.ClientHelper
     {
         public static byte[] ImageToByteArray(Bitmap Img)
         {
-            // Memory stream instance
-            MemoryStream Stream = new MemoryStream();
-            // Save image to memory stream with BMP format
-            Img.Save(Stream, ImageFormat.Bmp);
-            // Convert stream to byte[]
-            return (Stream.ToArray());
+            using (MemoryStream Stream = new MemoryStream())
+            {
+                Img.Save(Stream, ImageFormat.Bmp);
+                return (Stream.ToArray());
+            }
         }
         public static Bitmap ByteArrayToImage(byte[] Bytes)
         {
-            // Memory stream instance
-            MemoryStream Stream = new MemoryStream(Bytes);
-            // Get image from memory stream
-            Bitmap Img = new Bitmap(Image.FromStream(Stream));
-            // Return image
-            return Img;
+            using (MemoryStream Stream = new MemoryStream(Bytes))
+            {
+                Bitmap Img = new Bitmap(Image.FromStream(Stream));
+                return Img;
+            }
         }
     }
 }
