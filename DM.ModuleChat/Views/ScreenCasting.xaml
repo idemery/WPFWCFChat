@@ -12,11 +12,11 @@
         <StackPanel.Resources>
             <BooleanToVisibilityConverter x:Key="BoolToVis" />
         </StackPanel.Resources>
-        <Button Content="Start/Stop Screen Casting" Command="{Binding StartScreenCastCommand}" />
+        <Button Content="{Binding StartStopName}" Command="{Binding StartScreenCastCommand}" />
         <TextBlock Margin="15" Visibility="{Binding Path=Casting, Converter={StaticResource BoolToVis}}" 
                    Text="Your desktop screen is currently being casted to viewers.." />
         <ScrollViewer>
-            <Image Source="{Binding ImageSource}" Stretch="Uniform" />
+            <Image Source="{Binding ImageSource}" Stretch="None" />
         </ScrollViewer>
     </StackPanel>
 </UserControl>

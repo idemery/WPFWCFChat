@@ -9,6 +9,37 @@
              mc:Ignorable="d" 
              d:DesignHeight="450" d:DesignWidth="800">
     <Grid>
-            
+        <StackPanel MinWidth="200">
+            <TextBlock Text="TFS Settings" Margin="0,0,0,8" Style="{StaticResource Heading2}" />
+            <TextBlock Text="Kindly provide the TFS URL, preferred query path, and credentials for authentication. Kindly note that this section assumes you have already created a query on the TFS server." Margin="0,0,0,8" TextWrapping="Wrap" />
+            <Grid>
+                <Grid.RowDefinitions>
+                    <RowDefinition Height="Auto"/>
+                    <RowDefinition Height="Auto"/>
+                    <RowDefinition Height="Auto"/>
+                    <RowDefinition Height="Auto"/>
+                    <RowDefinition Height="Auto"/>
+                </Grid.RowDefinitions>
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="Auto"/>
+                    <ColumnDefinition Width="300"/>
+                    <ColumnDefinition Width="*"/>
+                </Grid.ColumnDefinitions>
+                
+                <Label Content="TFS Url" Grid.Column="0" Grid.Row="0" Margin="10, 10" />
+                <TextBox Grid.Column="1" Grid.Row="0" Margin="10, 10" Text="{Binding TfsSettings.URL, Mode=TwoWay}" />
+                
+                <Label Content="Query Path" Grid.Column="0" Grid.Row="1" Margin="10, 10" />
+                <TextBox Grid.Column="1" Grid.Row="1" Margin="10, 10" Text="{Binding TfsSettings.QueryPath, Mode=TwoWay}"/>
+                
+                <Label Content="Username" Grid.Column="0" Grid.Row="2" Margin="10, 10" />
+                <TextBox Grid.Column="1" Grid.Row="2" Margin="10, 10" Text="{Binding TfsSettings.UserName, Mode=TwoWay}"/>
+
+                <Label Content="Password" Grid.Column="0" Grid.Row="3" Margin="10, 10" />
+                <PasswordBox x:Name="PasswordBox" Grid.Column="1" Grid.Row="3" Margin="10, 10" />
+
+                <Button Grid.Row="4" Grid.ColumnSpan="2" Content="Save" Command="{Binding SaveCommand}" CommandParameter="{Binding ElementName=PasswordBox}"/>
+            </Grid>
+        </StackPanel>
     </Grid>
 </UserControl>

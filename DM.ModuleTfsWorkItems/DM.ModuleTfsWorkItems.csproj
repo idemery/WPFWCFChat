@@ -87,8 +87,11 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Class1.cs" />
+    <Compile Include="ModuleTfs.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="Services\ITfsSettingsService.cs" />
     <Compile Include="Services\LinkGroupService.cs" />
+    <Compile Include="Services\TfsSettingsService.cs" />
     <Compile Include="ViewModels\TfsSettingsViewModel.cs" />
     <Compile Include="Views\AllView.xaml.cs">
       <DependentUpon>AllView.xaml</DependentUpon>

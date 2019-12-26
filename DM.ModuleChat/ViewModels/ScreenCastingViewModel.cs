@@ -18,7 +18,7 @@ using System.Windows.Media.Imaging;
 
 namespace DM.ModuleChat.ViewModels
 {
-    public class ScreenCastingViewModel : BindableBase
+    public class ScreenCastingViewModel : BaseViewModel
     {
         private ImageSource _imgSrc;
 
@@ -38,7 +38,7 @@ namespace DM.ModuleChat.ViewModels
         private PresenterDesktop Desktop = new PresenterDesktop();
         private IProxyService proxyService;
 
-        public ScreenCastingViewModel(IEventAggregator ea, IProxyService proxyService)
+        public ScreenCastingViewModel(IEventAggregator ea, IProxyService proxyService) : base(ea)
         {
             this.proxyService = proxyService;
 
@@ -49,15 +49,18 @@ namespace DM.ModuleChat.ViewModels
 
             ea.GetEvent<ChatEvent>().Subscribe(ScreenReceived, ThreadOption.UIThread, true, dm => dm is ScreenModel);
 
-            StartScreenCastCommand = new DelegateCommand(StartScreenCast);
+            StartScreenCastCommand = new DelegateCommand(StartScreenCast, () => Connected);
+            commandsToNotify.Add(StartScreenCastCommand);
         }
+
+        public string StartStopName => Casting ? "Stop Screen Casting" : "Start Screen Casting";
 
         private bool _casting;
 
         public bool Casting
         {
             get { return _casting; }
-            set { SetProperty(ref _casting, value); }
+            set { SetProperty(ref _casting, value); RaisePropertyChanged("StartStopName"); }
         }
 
         private void StartScreenCast()
@@ -85,7 +88,7 @@ namespace DM.ModuleChat.ViewModels
 
         void Worker_DoWork(object sender, DoWorkEventArgs e)
         {
-            if (Worker.CancellationPending || proxyService.State != CommunicationState.Opened)
+            if (Worker.CancellationPending || proxyService.State != CommunicationState.Opened || !Casting)
             {
                 e.Cancel = true;
                 return;

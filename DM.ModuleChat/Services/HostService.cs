@@ -89,7 +89,7 @@ namespace DM.ModuleChat.Services
                 var client = Clients.FirstOrDefault(c => c.SessionId == sid);
                 try
                 {
-                    Task.Factory.StartNew(() => client.Callback.Receive(data));
+                    client.Callback.Receive(data);
                 }
                 catch
                 {

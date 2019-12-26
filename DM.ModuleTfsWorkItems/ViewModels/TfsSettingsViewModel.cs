@@ -1,24 +1,43 @@
-﻿using Prism.Commands;
+﻿using DM.ModuleTfsWorkItems.Services;
+using Prism.Commands;
 using Prism.Mvvm;
 using System.Net;
 using System.Threading;
 using System.Threading.Tasks;
+using System.Windows.Controls;
 
 namespace DM.ModuleTfsWorkItems.ViewModels
 {
     public class TfsSettingsViewModel : BindableBase
     {
+        public DelegateCommand<object> SaveSettingsCommand { get; private set; }
         public DelegateCommand StartListenForNotificationsCommand { get; private set; }
         public DelegateCommand StopListenForNotificationsCommand { get; private set; }
-        CancellationTokenSource cts;
 
-        public TfsSettingsViewModel()
+        CancellationTokenSource cts;
+        private readonly ITfsSettingsService settingsService;
+        public ITfsSettingsService Settings { get => settingsService; }
+
+        public TfsSettingsViewModel(ITfsSettingsService settingsService)
         {
+            this.settingsService = settingsService;
+
+            SaveSettingsCommand = new DelegateCommand<object>(SaveSettings);
             StartListenForNotificationsCommand = new DelegateCommand(StartListenForNotifications, CanStartListenForNotifications);
             StopListenForNotificationsCommand = new DelegateCommand(StopListenForNotifications, CanStopListenForNotifications);
         }
 
-        public void StartListenForNotifications()
+        private void SaveSettings(object args)
+        {
+            if (!(args is PasswordBox))
+            {
+                return;
+            }
+
+            Settings.Password = ((PasswordBox)args).Password;
+        }
+
+        private void StartListenForNotifications()
         {
             cts = new CancellationTokenSource();
 
@@ -27,18 +46,18 @@ namespace DM.ModuleTfsWorkItems.ViewModels
             task.Wait();
         }
 
-        public bool CanStartListenForNotifications()
+        private bool CanStartListenForNotifications()
         {
             return cts != null;
         }
 
-        public void StopListenForNotifications()
+        private void StopListenForNotifications()
         {
             cts.Cancel();
             cts = null;
         }
 
-        public bool CanStopListenForNotifications()
+        private bool CanStopListenForNotifications()
         {
             return cts != null && !cts.Token.IsCancellationRequested;
         }
