@@ -53,23 +53,23 @@ namespace DM.Demo
                 Source = GetUri(typeof(IntroductionView))
             });
 
-            linkGroup.Links.Add(new Link
-            {
-                DisplayName = "Modern UI for WPF",
-                Source = GetUri(typeof(MUIView))
-            });
+            //linkGroup.Links.Add(new Link
+            //{
+            //    DisplayName = "Modern UI for WPF",
+            //    Source = GetUri(typeof(MUIView))
+            //});
 
-            linkGroup.Links.Add(new Link
-            {
-                DisplayName = "Data Grid",
-                Source = GetUri(typeof(DataGrid))
-            });
+            //linkGroup.Links.Add(new Link
+            //{
+            //    DisplayName = "Data Grid",
+            //    Source = GetUri(typeof(DataGrid))
+            //});
 
-            linkGroup.Links.Add(new Link
-            {
-                DisplayName = "Lorem Ipsum",
-                Source = GetUri(typeof(LoremIpsumView))
-            });
+            //linkGroup.Links.Add(new Link
+            //{
+            //    DisplayName = "Lorem Ipsum",
+            //    Source = GetUri(typeof(LoremIpsumView))
+            //});
 
             this.MenuLinkGroups.Add(linkGroup);
         }

@@ -40,7 +40,7 @@
                 <Label Content="Password" Grid.Column="0" Grid.Row="3" Margin="10, 10" />
                 <PasswordBox x:Name="PasswordBox" Grid.Column="1" Grid.Row="3" Margin="10, 10" />
 
-                <mui:ModernButton  Grid.Row="4" Grid.Column="1" Margin="10, 10" Content="Save" Command="{Binding SaveCommand}" CommandParameter="{Binding ElementName=PasswordBox}"/>
+                <Button Grid.Row="4" Grid.Column="1" Margin="10, 10" Content="Save" Command="{Binding SaveCommand}" CommandParameter="{Binding ElementName=PasswordBox}"/>
             </Grid>
             
             <TextBlock Text="TFS Notifications Settings" Margin="0,30,0,8" Style="{StaticResource Heading2}" />
