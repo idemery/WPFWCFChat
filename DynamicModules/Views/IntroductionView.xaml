@@ -10,10 +10,10 @@
     <Grid Style="{StaticResource ContentRoot}" MaxWidth="{StaticResource ViewMaxWidth}" HorizontalAlignment="Left">
         <ScrollViewer>
             <StackPanel >
-                <TextBlock Text="TCC WORK HUB" Style="{StaticResource Heading1}" Margin="0,0,0,8"/>
-                <mui:BBCodeBlock BBCode="[b]TCC WORK HUB[/b] is an on-premise collaboration software that enables you and your team to work together in an easy, private, and secure way." Margin="0,0,0,24" />
-                <mui:BBCodeBlock BBCode="[b]TCC WORK HUB[/b] will enable you to chat and screen cast your work station with your team, it will also notify you as soon as you receive a mention or you are assigned a new task on TFS server." Margin="0,0,0,24" />
-                <mui:BBCodeBlock BBCode="New features and functionalities are coming soon to help you track projects and collaborate more with your team. Find more information on [url=https://www.tcc-ict.com]TCC website[/url]" Margin="0,0,0,24" /> 
+                <TextBlock Text="WORK HUB" Style="{StaticResource Heading1}" Margin="0,0,0,8"/>
+                <mui:BBCodeBlock BBCode="[b]WORK HUB[/b] is an on-premise collaboration software that enables you and your team to work together in an easy, private, and secure way." Margin="0,0,0,24" />
+                <mui:BBCodeBlock BBCode="[b]WORK HUB[/b] will enable you to chat and screen cast your work station with your team, it will also notify you as soon as you receive a mention or you are assigned a new task." Margin="0,0,0,24" />
+                <mui:BBCodeBlock BBCode="New features and functionalities are coming soon to help you track projects and collaborate more with your team." Margin="0,0,0,24" /> 
             </StackPanel>
         </ScrollViewer>
     </Grid>

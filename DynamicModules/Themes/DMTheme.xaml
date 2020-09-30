@@ -3,15 +3,15 @@
                     xmlns:mui="http://firstfloorsoftware.com/ModernUI">
 
     <ResourceDictionary.MergedDictionaries>
-        <ResourceDictionary Source="/FirstFloor.ModernUI;component/Assets/ModernUI.Dark.xaml" />
+        <ResourceDictionary Source="/FirstFloor.ModernUI;component/Assets/ModernUI.Light.xaml" />
     </ResourceDictionary.MergedDictionaries>
 
-    <Color x:Key="AccentColor">#1ba1e2</Color>
+    <Color x:Key="AccentColor">#a20025</Color>
 
     <Grid x:Key="WindowBackgroundContent" x:Shared="false" Margin="0,0,0,-36">
-        <Rectangle Margin="0,0,36,-36" Height="550">
+        <Rectangle Margin="0,0,36,-36">
             <Rectangle.Fill>
-                <ImageBrush Opacity=".025" ImageSource="tcc.png" Stretch="None" AlignmentX="Right" AlignmentY="Bottom" />
+                <ImageBrush Opacity=".2" ImageSource="dm-logo.png" Stretch="None" AlignmentX="Right" AlignmentY="Bottom" />
             </Rectangle.Fill>
         </Rectangle>
         <Rectangle>

@@ -22,6 +22,7 @@
     <ErrorReport>prompt</ErrorReport>
     <WarningLevel>4</WarningLevel>
     <PlatformTarget>x86</PlatformTarget>
+    <AllowUnsafeBlocks>true</AllowUnsafeBlocks>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
     <DebugType>pdbonly</DebugType>
@@ -30,6 +31,7 @@
     <DefineConstants>TRACE</DefineConstants>
     <ErrorReport>prompt</ErrorReport>
     <WarningLevel>4</WarningLevel>
+    <AllowUnsafeBlocks>true</AllowUnsafeBlocks>
   </PropertyGroup>
   <ItemGroup>
     <Reference Include="CommonServiceLocator, Version=2.0.4.0, Culture=neutral, PublicKeyToken=489b6accfaf20ef0, processorArchitecture=MSIL">
@@ -91,6 +93,33 @@
     <Reference Include="WindowsBase" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Base\ClientHelper\Capturing\API.cs" />
+    <Compile Include="Base\ClientHelper\Capturing\CaptureDesktop.cs" />
+    <Compile Include="Base\ClientHelper\Controls\Desktop.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="Base\ClientHelper\Controls\Desktop.Designer.cs">
+      <DependentUpon>Desktop.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Base\ClientHelper\DesktopCompression.cs" />
+    <Compile Include="Base\ClientHelper\DesktopHandler.cs" />
+    <Compile Include="Base\ClientHelper\Global\Global.cs" />
+    <Compile Include="Base\ClientHelper\Imaging\ImageBytesConverter.cs" />
+    <Compile Include="Base\ClientHelper\Imaging\ImageXOR.cs" />
+    <Compile Include="Base\ClientHelper\RemoteAction\MouseAction.cs" />
+    <Compile Include="Base\ClientHelper\RemoteAction\SimulateAction.cs" />
+    <Compile Include="Base\MemCompressor\Consts.cs" />
+    <Compile Include="Base\MemCompressor\Deflator.cs" />
+    <Compile Include="Base\MemCompressor\Inflator.cs" />
+    <Compile Include="Base\MemCompressor\Utils.cs" />
+    <Compile Include="Base\Models\ChatJoin.cs" />
+    <Compile Include="Base\Models\ChatLeave.cs" />
+    <Compile Include="Base\Models\ChatMessage.cs" />
+    <Compile Include="Base\Models\ClientModel.cs" />
+    <Compile Include="Base\Models\DataModel.cs" />
+    <Compile Include="Base\Security\AesHelper.cs" />
+    <Compile Include="Base\Services\IClientService.cs" />
+    <Compile Include="Base\Services\IHostService.cs" />
     <Compile Include="Events\ChatEvent.cs" />
     <Compile Include="Events\ConnectionEvent.cs" />
     <Compile Include="Helpers\ChatServiceHelper.cs" />
@@ -152,7 +181,10 @@
     <None Include="packages.config" />
   </ItemGroup>
   <ItemGroup>
-    <Folder Include="Models\" />
+    <ProjectReference Include="..\DM.Core\DM.Core.csproj">
+      <Project>{085a3767-0f46-4923-8eb5-596ce276fc47}</Project>
+      <Name>DM.Core</Name>
+    </ProjectReference>
   </ItemGroup>
   <ItemGroup>
     <Page Include="Views\Chat.xaml">
@@ -201,10 +233,9 @@
     </Page>
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\DM.Core\DM.Core.csproj">
-      <Project>{085a3767-0f46-4923-8eb5-596ce276fc47}</Project>
-      <Name>DM.Core</Name>
-    </ProjectReference>
+    <EmbeddedResource Include="Base\ClientHelper\Controls\Desktop.resx">
+      <DependentUpon>Desktop.cs</DependentUpon>
+    </EmbeddedResource>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <PropertyGroup>
